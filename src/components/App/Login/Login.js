@@ -8,7 +8,6 @@ function Login({
   onLogin,
   submitError,
   isLoading,
-  isSubmiting,
 }) {
   function handleSubmit(e) {
     e.preventDefault();
