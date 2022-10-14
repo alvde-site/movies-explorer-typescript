@@ -24,14 +24,33 @@ import {
   WIDTHOMEDIUMDEVICE,
 } from "../../utils/config";
 
+interface ISavedCard {
+  country: string;
+  description: string;
+  director: string;
+  duration: number;
+  image: string;
+  isClicked: boolean;
+  movieId: number;
+  nameEN: string;
+  nameRU: string;
+  owner: string;
+  thumbnail: string;
+  trailerLink: string;
+  year: string;
+  __v: number;
+  _id: string;
+}
+
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [isToggleBurger, setIsToggleBurger] = useState(false);
   const [isToggleMoviesFilter, setIsToggleMoviesFilter] = useState(false);
   const [cards, setCards] = useState([]);
-  const [isSavedCards, setIsSavedCards] = useState<any[]>([]); // Сохраненные фильмы текущего пользователя
-  const [currentUser, setCurrentUser] = useState<{name?:any,
-  email?:any}>({});
+  const [isSavedCards, setIsSavedCards] = useState<ISavedCard[]>([]); // Сохраненные фильмы текущего пользователя
+  const [currentUser, setCurrentUser] = useState<{ name?: any; email?: any }>(
+    {}
+  );
   const [isEmptySearchValue, setIsEmptySearchValue] = useState(false);
   const [isEmptySavedMoviesSearchValue, setIsEmptySavedMoviesSearchValue] =
     useState(false);
@@ -113,13 +132,13 @@ function App() {
           // moviesData = массив объектов карточке с сервера
 
           setCurrentUser(userData);
-          console.log(moviesData)
+          console.log(moviesData);
           const moviesOfCurrentUser = moviesData.filter(
             // Сохраненные фильмы текущего пользователя
-            (movie:any) => userData._id === movie.owner
+            (movie: any) => userData._id === movie.owner
           );
 
-          const formattedMovies = moviesOfCurrentUser.map((movie:any) => {
+          const formattedMovies = moviesOfCurrentUser.map((movie: any) => {
             return {
               ...movie,
               isClicked: true,
@@ -135,12 +154,13 @@ function App() {
 
             for (let i = 0; i < formattedMovies.length; i++) {
               for (let m = 0; m < newCurrentInitialMovies.length; m++) {
-                newCurrentInitialMovies = newCurrentInitialMovies.map((m:any) =>
-                  m.isClicked
-                    ? m
-                    : m.movieId === formattedMovies[i].movieId
-                    ? formattedMovies[i]
-                    : m
+                newCurrentInitialMovies = newCurrentInitialMovies.map(
+                  (m: any) =>
+                    m.isClicked
+                      ? m
+                      : m.movieId === formattedMovies[i].movieId
+                      ? formattedMovies[i]
+                      : m
                 );
               }
             }
@@ -164,7 +184,10 @@ function App() {
     if (loggedIn) {
       if (JSON.parse(localStorage.getItem("movies") || "[]")) {
         setCards(
-          JSON.parse(localStorage.getItem("movies") || "[]").slice(0, numberOfMovies)
+          JSON.parse(localStorage.getItem("movies") || "[]").slice(
+            0,
+            numberOfMovies
+          )
         );
       } else {
         setIsDisableMoreButton(true);
@@ -188,7 +211,7 @@ function App() {
     handleNumberOfMovies(deviceWidth);
   }, [deviceWidth]);
 
-  function handleNumberOfMovies(width:any) {
+  function handleNumberOfMovies(width: any) {
     if (width >= WIDTHOFBIGDEVICE) {
       setNumberOfMovies(COUNTOFMOVIESFORBIGDEVICE);
     } else if (WIDTHOFBIGDEVICE < width || width >= WIDTHOMEDIUMDEVICE) {
@@ -198,7 +221,7 @@ function App() {
     }
   }
 
-  function handleLogin({ password, email }:any) {
+  function handleLogin({ password, email }: any) {
     setIsLoading(true);
     setSubmitError("");
     MainApiSet.login({ email, password })
@@ -234,7 +257,7 @@ function App() {
       });
   }
 
-  function handleRegister({ name, password, email }:any) {
+  function handleRegister({ name, password, email }: any) {
     setIsLoading(true);
     setSubmitError("");
     MainApiSet.register({ name, password, email })
@@ -260,7 +283,7 @@ function App() {
     setIsDisableMoreButton(() => numberOfMovies > cards.length);
   }, [numberOfMovies, cards]);
 
-  function handleAddMovies(number:any, cards:any) {
+  function handleAddMovies(number: any, cards: any) {
     if (deviceWidth >= WIDTHOFBIGDEVICE) {
       setNumberOfMovies(number + COUNTOFADDEDMOVIESFORBIGDEVICE);
     } else if (
@@ -281,7 +304,7 @@ function App() {
     if (localStorage.movies) {
       const movies = JSON.parse(localStorage.movies);
       const shortMovies = JSON.parse(localStorage.movies).filter(
-        (m:any) => m.duration <= SHORTMOVIESDURATION
+        (m: any) => m.duration <= SHORTMOVIESDURATION
       );
       if (isToggleMoviesFilter) {
         setCards(shortMovies);
@@ -296,9 +319,9 @@ function App() {
     localStorage.setItem("toggle", JSON.stringify(!isToggleMoviesFilter));
   }
 
-  function filterCrashedMovies(movies:any) {
+  function filterCrashedMovies(movies: any) {
     const filterCrashMovies = movies.filter(
-      (m:any) =>
+      (m: any) =>
         m.id &&
         m.country &&
         m.director &&
@@ -310,7 +333,7 @@ function App() {
         m.nameRU &&
         m.nameEN
     );
-    const filterCrashTrailerLink = filterCrashMovies.filter((m:any) =>
+    const filterCrashTrailerLink = filterCrashMovies.filter((m: any) =>
       m.trailerLink.startsWith("https")
     );
     return filterCrashTrailerLink;
@@ -320,7 +343,7 @@ function App() {
     if (localStorage.savedmovies) {
       const savedMovies = JSON.parse(localStorage.savedmovies);
       const shortSavedMovies = JSON.parse(localStorage.savedmovies).filter(
-        (m:any) => m.duration <= SHORTMOVIESDURATION
+        (m: any) => m.duration <= SHORTMOVIESDURATION
       );
       if (isSavedMoviesToggleFilter) {
         setIsSavedCards(shortSavedMovies);
@@ -334,7 +357,8 @@ function App() {
     setIsSavedMoviesToggleFilter(!isSavedMoviesToggleFilter);
   }
 
-  function handleSelectMovie(card:any) {
+  function handleSelectMovie(card: any) {
+    console.log(card);
     if (!card.isClicked) {
       MainApiSet.createMovie(card, token)
         .then((cardData) => {
@@ -348,13 +372,15 @@ function App() {
           localStorage.setItem("savedmovies", JSON.stringify(newSavedMovies));
           setIsSavedCards(newSavedMovies);
 
-          setCurrentInitialMovies((movies:any) =>
-            movies.map((c:any) => (c.movieId === newCard.movieId ? newCard : c))
+          setCurrentInitialMovies((movies: any) =>
+            movies.map((c: any) =>
+              c.movieId === newCard.movieId ? newCard : c
+            )
           );
 
           // Сохраняем выбранную карточку в localStorage найденных карточек на странице /movies и отображаем
           const selectedMovies = JSON.parse(localStorage.movies);
-          const newSelectedCards = selectedMovies.map((c:any) =>
+          const newSelectedCards = selectedMovies.map((c: any) =>
             c.movieId === newCard.movieId ? newCard : c
           );
           localStorage.setItem("movies", JSON.stringify(newSelectedCards));
@@ -370,20 +396,22 @@ function App() {
           // Удаляем выбранную карточку из localStorage сохраненных карточек и отображаем
           const savedMovies = JSON.parse(localStorage.savedmovies);
           const newSavedMovies = savedMovies.filter(
-            (m:any) => m.movieId !== deletedMovie.movieId
+            (m: any) => m.movieId !== deletedMovie.movieId
           );
           localStorage.setItem("savedmovies", JSON.stringify(newSavedMovies));
           setIsSavedCards(newSavedMovies);
 
           // Удаляем выбранную карточку из localStorage карточек по умолчанию и отображаем
           const newCard = { ...deletedMovie, isClicked: false };
-          setCurrentInitialMovies((movies:any) =>
-            movies.map((c:any) => (c.movieId === newCard.movieId ? newCard : c))
+          setCurrentInitialMovies((movies: any) =>
+            movies.map((c: any) =>
+              c.movieId === newCard.movieId ? newCard : c
+            )
           );
 
           // Удалеяем выбранную карточку из localStorage найденных карточек на странице /movies и отображаем
           const selectedMovies = JSON.parse(localStorage.movies);
-          const newSelectedCards = selectedMovies.map((c:any) =>
+          const newSelectedCards = selectedMovies.map((c: any) =>
             c.movieId === newCard.movieId ? newCard : c
           );
           localStorage.setItem("movies", JSON.stringify(newSelectedCards));
@@ -393,8 +421,8 @@ function App() {
         });
     }
     setIsSavedCards((state) => state.filter((c) => c.isClicked));
-    setCards((state:any) =>
-      state.map((c:any) => (c.movieId === card.movieId ? card : c))
+    setCards((state: any) =>
+      state.map((c: any) => (c.movieId === card.movieId ? card : c))
     );
   }
 
@@ -408,13 +436,13 @@ function App() {
     setSearch(JSON.parse(localStorage.value));
   }
 
-  function handleSaveToLocalStorage(movies:any, val:any) {
+  function handleSaveToLocalStorage(movies: any, val: any) {
     localStorage.setItem("movies", JSON.stringify(movies));
     localStorage.setItem("toggle", JSON.stringify(isToggleMoviesFilter));
     localStorage.setItem("value", JSON.stringify(val));
   }
 
-  function handleSearchMovie(value:any) {
+  function handleSearchMovie(value: any) {
     // Проверка на отсутствие ключевого слова для поиска фильма
     if (!value) {
       setIsEmptySearchValue(true);
@@ -428,7 +456,7 @@ function App() {
       // Проверяем - загружены ли фильмы по умолчанию
       MoviesApiSet.getInitialMovies()
         .then((movies) => {
-          console.log(movies)
+          console.log(movies);
           const isNotCrashMovies = filterCrashedMovies(movies);
           const formattedMovies = isNotCrashMovies.map(
             //  Сохраняем массив фильмом в нужном формате
@@ -443,7 +471,7 @@ function App() {
               trailerLink,
               nameRU,
               nameEN,
-            }:any) => {
+            }: any) => {
               return {
                 movieId: id,
                 country,
@@ -466,7 +494,7 @@ function App() {
             JSON.stringify(formattedMovies)
           );
           setCurrentInitialMovies(formattedMovies);
-          const foundMovies = formattedMovies.filter((m:any) =>
+          const foundMovies = formattedMovies.filter((m: any) =>
             m.nameRU.toLowerCase().includes(value.toLowerCase())
           );
           handleSaveToLocalStorage(foundMovies, value);
@@ -496,7 +524,7 @@ function App() {
           setIsToggleMoviesFilter(false);
         });
     } else {
-      const foundMovies:any = currentInitialMovies.filter((m:any) =>
+      const foundMovies: any = currentInitialMovies.filter((m: any) =>
         m.nameRU.toLowerCase().includes(value.toLowerCase())
       );
       handleSaveToLocalStorage(foundMovies, value);
@@ -504,11 +532,11 @@ function App() {
 
       if (foundMovies.length > 1) {
         for (let i = 0; i < foundMovies.length; i++) {
-          newCurrentInitialMovies = currentInitialMovies.map((m:any) =>
+          newCurrentInitialMovies = currentInitialMovies.map((m: any) =>
             m.movieId === foundMovies[i].movieId ? foundMovies[i] : m
           );
         }
-        if(newCurrentInitialMovies) {
+        if (newCurrentInitialMovies) {
           setCurrentInitialMovies(newCurrentInitialMovies);
         }
       }
@@ -527,7 +555,7 @@ function App() {
     setIsToggleMoviesFilter(false);
   }
 
-  function handleSearchSavedMovie(value:any) {
+  function handleSearchSavedMovie(value: any) {
     // Проверка на отсутствие ключевого слова в поиске фильма
     if (!value) {
       setIsEmptySavedMoviesSearchValue(true);
@@ -535,8 +563,10 @@ function App() {
     } else {
       setIsEmptySavedMoviesSearchValue(false);
     }
-    const initialFoundMovies = JSON.parse(localStorage.getItem("savedmovies") || "");
-    const foundMovies = initialFoundMovies.filter((m:any) =>
+    const initialFoundMovies = JSON.parse(
+      localStorage.getItem("savedmovies") || ""
+    );
+    const foundMovies = initialFoundMovies.filter((m: any) =>
       m.nameRU.toLowerCase().includes(value.toLowerCase())
     );
 
@@ -556,7 +586,7 @@ function App() {
     setSubmitSuccess(false);
   }
 
-  function handleEditProfile({ name, email }:any) {
+  function handleEditProfile({ name, email }: any) {
     setIsLoading(true);
     MainApiSet.updateUser({ name, email }, token)
       .then((res) => {
@@ -608,11 +638,11 @@ function App() {
       });
   }
 
-  function handleSetSearch(value:any) {
+  function handleSetSearch(value: any) {
     setSearch(value);
   }
 
-  function handleSetSavedMovieSearch(value:any) {
+  function handleSetSavedMovieSearch(value: any) {
     setSavedSearch(value);
   }
 
@@ -620,7 +650,7 @@ function App() {
     setIsToggleBurger(false);
   }
 
-  function handleProfileSameValue(e:any) {
+  function handleProfileSameValue(e: any) {
     if (
       e.target.value === currentUser.name ||
       e.target.value === currentUser.email
