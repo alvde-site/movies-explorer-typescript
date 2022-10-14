@@ -38,8 +38,15 @@ interface ISavedCard {
   thumbnail: string;
   trailerLink: string;
   year: string;
-  __v: number;
+  __v?: number;
   _id: string;
+}
+
+interface ICurrentUser {
+  name?: string;
+  email?: string;
+  __v?: number;
+  _id?: string;
 }
 
 function App() {
@@ -48,7 +55,7 @@ function App() {
   const [isToggleMoviesFilter, setIsToggleMoviesFilter] = useState(false);
   const [cards, setCards] = useState([]);
   const [isSavedCards, setIsSavedCards] = useState<ISavedCard[]>([]); // Сохраненные фильмы текущего пользователя
-  const [currentUser, setCurrentUser] = useState<{ name?: any; email?: any }>(
+  const [currentUser, setCurrentUser] = useState<ICurrentUser>(
     {}
   );
   const [isEmptySearchValue, setIsEmptySearchValue] = useState(false);
@@ -130,9 +137,7 @@ function App() {
       ])
         .then(([userData, moviesData]) => {
           // moviesData = массив объектов карточке с сервера
-
           setCurrentUser(userData);
-          console.log(moviesData);
           const moviesOfCurrentUser = moviesData.filter(
             // Сохраненные фильмы текущего пользователя
             (movie: any) => userData._id === movie.owner
