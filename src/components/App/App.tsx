@@ -162,9 +162,9 @@ function App() {
 
   useEffect(() => {
     if (loggedIn) {
-      if (JSON.parse(localStorage.getItem("movies") || "")) {
+      if (JSON.parse(localStorage.getItem("movies") || "[]")) {
         setCards(
-          JSON.parse(localStorage.getItem("movies") || "").slice(0, numberOfMovies)
+          JSON.parse(localStorage.getItem("movies") || "[]").slice(0, numberOfMovies)
         );
       } else {
         setIsDisableMoreButton(true);
