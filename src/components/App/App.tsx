@@ -45,19 +45,9 @@ interface ISavedMovie {
 interface ICurrentUser {
   name?: string;
   email?: string;
+  password?: string;
   __v?: number;
   _id?: string;
-}
-
-interface ILogin {
-  password: string;
-  email: string;
-}
-
-interface IRegister {
-  name: string;
-  password: string;
-  email: string;
 }
 
 interface IInitialMovie {
@@ -252,7 +242,7 @@ function App() {
     }
   }
 
-  function handleLogin({ password, email }: ILogin) {
+  function handleLogin({ password, email }: ICurrentUser) {
     setIsLoading(true);
     setSubmitError("");
     MainApiSet.login({ email, password })
@@ -288,7 +278,7 @@ function App() {
       });
   }
 
-  function handleRegister({ name, password, email }: IRegister) {
+  function handleRegister({ name, password, email }: ICurrentUser) {
     setIsLoading(true);
     setSubmitError("");
     MainApiSet.register({ name, password, email })
@@ -388,7 +378,7 @@ function App() {
     setIsSavedMoviesToggleFilter(!isSavedMoviesToggleFilter);
   }
 
-  function handleSelectMovie(card: any) {
+  function handleSelectMovie(card: ISavedMovie) {
     console.log(card);
     if (!card.isClicked) {
       MainApiSet.createMovie(card, token)
@@ -403,15 +393,15 @@ function App() {
           localStorage.setItem("savedmovies", JSON.stringify(newSavedMovies));
           setIsSavedCards(newSavedMovies);
 
-          setCurrentInitialMovies((movies: any) =>
-            movies.map((c: any) =>
+          setCurrentInitialMovies((movies: ISavedMovie[]) =>
+            movies.map((c: ISavedMovie) =>
               c.movieId === newCard.movieId ? newCard : c
             )
           );
 
           // Сохраняем выбранную карточку в localStorage найденных карточек на странице /movies и отображаем
           const selectedMovies = JSON.parse(localStorage.movies);
-          const newSelectedCards = selectedMovies.map((c: any) =>
+          const newSelectedCards = selectedMovies.map((c: ISavedMovie) =>
             c.movieId === newCard.movieId ? newCard : c
           );
           localStorage.setItem("movies", JSON.stringify(newSelectedCards));
@@ -427,22 +417,22 @@ function App() {
           // Удаляем выбранную карточку из localStorage сохраненных карточек и отображаем
           const savedMovies = JSON.parse(localStorage.savedmovies);
           const newSavedMovies = savedMovies.filter(
-            (m: any) => m.movieId !== deletedMovie.movieId
+            (m: ISavedMovie) => m.movieId !== deletedMovie.movieId
           );
           localStorage.setItem("savedmovies", JSON.stringify(newSavedMovies));
           setIsSavedCards(newSavedMovies);
 
           // Удаляем выбранную карточку из localStorage карточек по умолчанию и отображаем
           const newCard = { ...deletedMovie, isClicked: false };
-          setCurrentInitialMovies((movies: any) =>
-            movies.map((c: any) =>
+          setCurrentInitialMovies((movies: ISavedMovie[]) =>
+            movies.map((c: ISavedMovie) =>
               c.movieId === newCard.movieId ? newCard : c
             )
           );
 
           // Удалеяем выбранную карточку из localStorage найденных карточек на странице /movies и отображаем
           const selectedMovies = JSON.parse(localStorage.movies);
-          const newSelectedCards = selectedMovies.map((c: any) =>
+          const newSelectedCards = selectedMovies.map((c: ISavedMovie) =>
             c.movieId === newCard.movieId ? newCard : c
           );
           localStorage.setItem("movies", JSON.stringify(newSelectedCards));
@@ -452,8 +442,8 @@ function App() {
         });
     }
     setIsSavedCards((state) => state.filter((c) => c.isClicked));
-    setCards((state: any) =>
-      state.map((c: any) => (c.movieId === card.movieId ? card : c))
+    setCards((state: ISavedMovie[]) =>
+      state.map((c: ISavedMovie) => (c.movieId === card.movieId ? card : c))
     );
   }
 
@@ -467,13 +457,13 @@ function App() {
     setSearch(JSON.parse(localStorage.value));
   }
 
-  function handleSaveToLocalStorage(movies: any, val: any) {
+  function handleSaveToLocalStorage(movies: ISavedMovie[], val: string) {
     localStorage.setItem("movies", JSON.stringify(movies));
     localStorage.setItem("toggle", JSON.stringify(isToggleMoviesFilter));
     localStorage.setItem("value", JSON.stringify(val));
   }
 
-  function handleSearchMovie(value: any) {
+  function handleSearchMovie(value: string) {
     // Проверка на отсутствие ключевого слова для поиска фильма
     if (!value) {
       setIsEmptySearchValue(true);
@@ -525,7 +515,7 @@ function App() {
             JSON.stringify(formattedMovies)
           );
           setCurrentInitialMovies(formattedMovies);
-          const foundMovies = formattedMovies.filter((m: any) =>
+          const foundMovies = formattedMovies.filter((m: ISavedMovie) =>
             m.nameRU.toLowerCase().includes(value.toLowerCase())
           );
           handleSaveToLocalStorage(foundMovies, value);
@@ -555,7 +545,7 @@ function App() {
           setIsToggleMoviesFilter(false);
         });
     } else {
-      const foundMovies: any = currentInitialMovies.filter((m: any) =>
+      const foundMovies: ISavedMovie[] = currentInitialMovies.filter((m: ISavedMovie) =>
         m.nameRU.toLowerCase().includes(value.toLowerCase())
       );
       handleSaveToLocalStorage(foundMovies, value);
@@ -563,7 +553,7 @@ function App() {
 
       if (foundMovies.length > 1) {
         for (let i = 0; i < foundMovies.length; i++) {
-          newCurrentInitialMovies = currentInitialMovies.map((m: any) =>
+          newCurrentInitialMovies = currentInitialMovies.map((m: ISavedMovie) =>
             m.movieId === foundMovies[i].movieId ? foundMovies[i] : m
           );
         }
@@ -586,7 +576,7 @@ function App() {
     setIsToggleMoviesFilter(false);
   }
 
-  function handleSearchSavedMovie(value: any) {
+  function handleSearchSavedMovie(value: string) {
     // Проверка на отсутствие ключевого слова в поиске фильма
     if (!value) {
       setIsEmptySavedMoviesSearchValue(true);
@@ -595,9 +585,9 @@ function App() {
       setIsEmptySavedMoviesSearchValue(false);
     }
     const initialFoundMovies = JSON.parse(
-      localStorage.getItem("savedmovies") || ""
+      localStorage.getItem("savedmovies") || "[]"
     );
-    const foundMovies = initialFoundMovies.filter((m: any) =>
+    const foundMovies = initialFoundMovies.filter((m: ISavedMovie) =>
       m.nameRU.toLowerCase().includes(value.toLowerCase())
     );
 
@@ -617,7 +607,7 @@ function App() {
     setSubmitSuccess(false);
   }
 
-  function handleEditProfile({ name, email }: any) {
+  function handleEditProfile({ name, email }: ICurrentUser) {
     setIsLoading(true);
     MainApiSet.updateUser({ name, email }, token)
       .then((res) => {
@@ -669,11 +659,11 @@ function App() {
       });
   }
 
-  function handleSetSearch(value: any) {
+  function handleSetSearch(value: string) {
     setSearch(value);
   }
 
-  function handleSetSavedMovieSearch(value: any) {
+  function handleSetSavedMovieSearch(value: string) {
     setSavedSearch(value);
   }
 
