@@ -79,7 +79,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [isToggleBurger, setIsToggleBurger] = useState(false);
   const [isToggleMoviesFilter, setIsToggleMoviesFilter] = useState(false);
-  const [cards, setCards] = useState([]);
+  const [cards, setCards] = useState<ISavedMovie[]>([]);
   const [isSavedCards, setIsSavedCards] = useState<ISavedMovie[]>([]); // Сохраненные фильмы текущего пользователя
   const [currentUser, setCurrentUser] = useState<ICurrentUser>(
     {}
