@@ -671,7 +671,7 @@ function App() {
     setIsToggleBurger(false);
   }
 
-  function handleProfileSameValue(e: any) {
+  function handleProfileSameValue(e: React.ChangeEvent<HTMLInputElement>) {
     if (
       e.target.value === currentUser.name ||
       e.target.value === currentUser.email
