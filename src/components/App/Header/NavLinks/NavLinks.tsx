@@ -1,6 +1,11 @@
 import { Link, NavLink } from "react-router-dom";
 
-function NavLinks({ onToggleBurger, isToggleBurger }) {
+interface INavLinksProps {
+  onToggleBurger: ()=> void;
+  isToggleBurger: boolean;
+}
+
+function NavLinks({ onToggleBurger, isToggleBurger }:INavLinksProps) {
   function handleBurger() {
     onToggleBurger();
   }
