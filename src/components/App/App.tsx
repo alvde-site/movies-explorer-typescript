@@ -24,22 +24,33 @@ import {
   WIDTHOMEDIUMDEVICE,
 } from "../../utils/config";
 
-interface ISavedMovie {
+interface IMovies {
   country: string;
   description: string;
   director: string;
   duration: number;
+  nameEN: string;
+  nameRU: string;
+  trailerLink: string;
+}
+
+interface ISavedMovie extends IMovies {
   image: string;
   isClicked?: boolean;
   movieId: number;
-  nameEN: string;
-  nameRU: string;
   owner: ICurrentUser;
   thumbnail: string;
-  trailerLink: string;
   year: string;
   __v?: number;
   _id?: string;
+}
+
+interface IInitialMovie extends IMovies{
+  created_at: string;
+  id: number;
+  image: {url: string};
+  updated_at: string;
+  year: string;
 }
 
 interface ICurrentUser {
@@ -48,21 +59,6 @@ interface ICurrentUser {
   password?: string;
   __v?: number;
   _id?: string;
-}
-
-interface IInitialMovie {
-  country: string;
-  created_at: string;
-  description: string;
-  director: string;
-  duration: number;
-  id: number;
-  image: {url: string};
-  nameEN: string;
-  nameRU: string;
-  trailerLink: string;
-  updated_at: string;
-  year: string;
 }
 
 function App() {
