@@ -24,22 +24,22 @@ import {
   WIDTHOMEDIUMDEVICE,
 } from "../../utils/config";
 
-interface ISavedCard {
+interface ISavedMovie {
   country: string;
   description: string;
   director: string;
   duration: number;
   image: string;
-  isClicked: boolean;
+  isClicked?: boolean;
   movieId: number;
   nameEN: string;
   nameRU: string;
-  owner: string;
+  owner: ICurrentUser;
   thumbnail: string;
   trailerLink: string;
   year: string;
   __v?: number;
-  _id: string;
+  _id?: string;
 }
 
 interface ICurrentUser {
@@ -49,12 +49,38 @@ interface ICurrentUser {
   _id?: string;
 }
 
+interface ILogin {
+  password: string;
+  email: string;
+}
+
+interface IRegister {
+  name: string;
+  password: string;
+  email: string;
+}
+
+interface IInitialMovie {
+  country: string;
+  created_at: string;
+  description: string;
+  director: string;
+  duration: number;
+  id: number;
+  image: {url: string};
+  nameEN: string;
+  nameRU: string;
+  trailerLink: string;
+  updated_at: string;
+  year: string;
+}
+
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [isToggleBurger, setIsToggleBurger] = useState(false);
   const [isToggleMoviesFilter, setIsToggleMoviesFilter] = useState(false);
   const [cards, setCards] = useState([]);
-  const [isSavedCards, setIsSavedCards] = useState<ISavedCard[]>([]); // Сохраненные фильмы текущего пользователя
+  const [isSavedCards, setIsSavedCards] = useState<ISavedMovie[]>([]); // Сохраненные фильмы текущего пользователя
   const [currentUser, setCurrentUser] = useState<ICurrentUser>(
     {}
   );
@@ -76,7 +102,7 @@ function App() {
   const [submitError, setSubmitError] = useState("");
   const [isEditProfile, setIsEditProfile] = useState(false);
   const [token, setToken] = useState("");
-  const [currentInitialMovies, setCurrentInitialMovies] = useState<any[]>([]);
+  const [currentInitialMovies, setCurrentInitialMovies] = useState<ISavedMovie[]>([]);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [isInvalidToken, setIsInvalidToken] = useState(false);
 
@@ -140,10 +166,10 @@ function App() {
           setCurrentUser(userData);
           const moviesOfCurrentUser = moviesData.filter(
             // Сохраненные фильмы текущего пользователя
-            (movie: any) => userData._id === movie.owner
+            (movie: ISavedMovie) => userData._id === movie.owner
           );
 
-          const formattedMovies = moviesOfCurrentUser.map((movie: any) => {
+          const formattedMovies = moviesOfCurrentUser.map((movie: ISavedMovie) => {
             return {
               ...movie,
               isClicked: true,
@@ -160,7 +186,7 @@ function App() {
             for (let i = 0; i < formattedMovies.length; i++) {
               for (let m = 0; m < newCurrentInitialMovies.length; m++) {
                 newCurrentInitialMovies = newCurrentInitialMovies.map(
-                  (m: any) =>
+                  (m: ISavedMovie) =>
                     m.isClicked
                       ? m
                       : m.movieId === formattedMovies[i].movieId
@@ -216,7 +242,7 @@ function App() {
     handleNumberOfMovies(deviceWidth);
   }, [deviceWidth]);
 
-  function handleNumberOfMovies(width: any) {
+  function handleNumberOfMovies(width: number) {
     if (width >= WIDTHOFBIGDEVICE) {
       setNumberOfMovies(COUNTOFMOVIESFORBIGDEVICE);
     } else if (WIDTHOFBIGDEVICE < width || width >= WIDTHOMEDIUMDEVICE) {
@@ -226,7 +252,7 @@ function App() {
     }
   }
 
-  function handleLogin({ password, email }: any) {
+  function handleLogin({ password, email }: ILogin) {
     setIsLoading(true);
     setSubmitError("");
     MainApiSet.login({ email, password })
@@ -262,7 +288,7 @@ function App() {
       });
   }
 
-  function handleRegister({ name, password, email }: any) {
+  function handleRegister({ name, password, email }: IRegister) {
     setIsLoading(true);
     setSubmitError("");
     MainApiSet.register({ name, password, email })
@@ -288,7 +314,7 @@ function App() {
     setIsDisableMoreButton(() => numberOfMovies > cards.length);
   }, [numberOfMovies, cards]);
 
-  function handleAddMovies(number: any, cards: any) {
+  function handleAddMovies(number: number) {
     if (deviceWidth >= WIDTHOFBIGDEVICE) {
       setNumberOfMovies(number + COUNTOFADDEDMOVIESFORBIGDEVICE);
     } else if (
@@ -308,8 +334,8 @@ function App() {
   useEffect(() => {
     if (localStorage.movies) {
       const movies = JSON.parse(localStorage.movies);
-      const shortMovies = JSON.parse(localStorage.movies).filter(
-        (m: any) => m.duration <= SHORTMOVIESDURATION
+      const shortMovies = movies.filter(
+        (m: ISavedMovie) => m.duration <= SHORTMOVIESDURATION
       );
       if (isToggleMoviesFilter) {
         setCards(shortMovies);
@@ -324,9 +350,9 @@ function App() {
     localStorage.setItem("toggle", JSON.stringify(!isToggleMoviesFilter));
   }
 
-  function filterCrashedMovies(movies: any) {
+  function filterCrashedMovies(movies: IInitialMovie[]) {
     const filterCrashMovies = movies.filter(
-      (m: any) =>
+      (m: IInitialMovie) =>
         m.id &&
         m.country &&
         m.director &&
@@ -338,7 +364,7 @@ function App() {
         m.nameRU &&
         m.nameEN
     );
-    const filterCrashTrailerLink = filterCrashMovies.filter((m: any) =>
+    const filterCrashTrailerLink = filterCrashMovies.filter((m: IInitialMovie) =>
       m.trailerLink.startsWith("https")
     );
     return filterCrashTrailerLink;
@@ -348,7 +374,7 @@ function App() {
     if (localStorage.savedmovies) {
       const savedMovies = JSON.parse(localStorage.savedmovies);
       const shortSavedMovies = JSON.parse(localStorage.savedmovies).filter(
-        (m: any) => m.duration <= SHORTMOVIESDURATION
+        (m: IInitialMovie) => m.duration <= SHORTMOVIESDURATION
       );
       if (isSavedMoviesToggleFilter) {
         setIsSavedCards(shortSavedMovies);
@@ -460,7 +486,7 @@ function App() {
     if (!localStorage.initialmovies) {
       // Проверяем - загружены ли фильмы по умолчанию
       MoviesApiSet.getInitialMovies()
-        .then((movies) => {
+        .then((movies: IInitialMovie[]) => {
           console.log(movies);
           const isNotCrashMovies = filterCrashedMovies(movies);
           const formattedMovies = isNotCrashMovies.map(
@@ -476,7 +502,7 @@ function App() {
               trailerLink,
               nameRU,
               nameEN,
-            }: any) => {
+            }: IInitialMovie): ISavedMovie => {
               return {
                 movieId: id,
                 country,

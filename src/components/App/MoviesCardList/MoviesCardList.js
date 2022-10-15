@@ -14,7 +14,7 @@ function MoviesCardList({
   cards,
 }) {
   function handleAddMovies() {
-    onAddMovies(numberOfMovies, cards);
+    onAddMovies(numberOfMovies);
   }
 
   return (
