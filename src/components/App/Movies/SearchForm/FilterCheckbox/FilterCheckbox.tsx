@@ -1,7 +1,12 @@
 import shortFilmsDisableIcon from "../../../../../images/svg/shortfilmstumb-disable.svg";
 import shortFilmsActiveIcon from "../../../../../images/svg/shortfilmstumb-active.svg";
 
-function FilterCheckbox({ isToggleFilter, onToggleFilter }) {
+interface IFilterCheckboxProps {
+  onToggleFilter: ()=> void;
+  isToggleFilter: boolean;
+}
+
+function FilterCheckbox({ isToggleFilter, onToggleFilter }:IFilterCheckboxProps) {
   function handleToggleMovies() {
     onToggleFilter();
   }

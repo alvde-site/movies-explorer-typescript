@@ -1,5 +1,15 @@
 import FilterCheckbox from "./FilterCheckbox/FilterCheckbox";
 
+interface IFilterCheckboxProps {
+  onSearch: (searchValue: string) => void;
+  onToggleFilter: () => void;
+  isToggleFilter: boolean;
+  isEmptyValue: boolean;
+  searchValue: string;
+  onSearchValue: (e: string) => void;
+  isLoading: boolean;
+}
+
 function SearchForm({
   onSearch,
   onToggleFilter,
@@ -7,19 +17,26 @@ function SearchForm({
   isEmptyValue,
   searchValue,
   onSearchValue,
-  isLoading
-}) {
-  function handleSubmit(e) {
+  isLoading,
+}: IFilterCheckboxProps) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     onSearch(searchValue);
   }
 
-  function handleSearchChange(e) {
-    onSearchValue(e.target.value);
+  function handleSearchChange(e: React.FormEvent<HTMLInputElement>) {
+    // onSearchValue((e.target as HTMLInputElement).value);
+    onSearchValue((e.target as HTMLInputElement).value);
   }
 
   return (
-    <form action="#" name="form" className="form" onSubmit={handleSubmit} noValidate>
+    <form
+      action="#"
+      name="form"
+      className="form"
+      onSubmit={handleSubmit}
+      noValidate
+    >
       <label htmlFor="searchmovie" className="form__field">
         <input
           id="searchmovie"
@@ -41,7 +58,11 @@ function SearchForm({
         >
           Нужно ввести ключевое слово
         </span>
-        <button className="form__submit" type="submit" disabled={isLoading}></button>
+        <button
+          className="form__submit"
+          type="submit"
+          disabled={isLoading}
+        ></button>
       </label>
       <FilterCheckbox
         onToggleFilter={onToggleFilter}

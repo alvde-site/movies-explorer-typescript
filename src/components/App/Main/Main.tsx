@@ -3,10 +3,17 @@ import Promo from "./Promo/Promo";
 import AboutProject from "./AboutProject/AboutProject";
 import Techs from "./Techs/Techs";
 import AboutMe from "./AboutMe/AboutMe";
-import Portfolio from "../Main/Portfolio/Portfolio";
+import Portfolio from "./Portfolio/Portfolio";
 import Footer from "../Footer/Footer";
 
-function Main({ loggedIn, onToggleBurger, isToggleBurger, onCloseNav }) {
+interface IMainProps {
+  loggedIn: boolean;
+  onToggleBurger: ()=> void;
+  isToggleBurger: boolean;
+  onCloseNav: ()=> void;
+}
+
+function Main({ loggedIn, onToggleBurger, isToggleBurger, onCloseNav }:IMainProps) {
   return (
     <>
       <Promo
