@@ -3,6 +3,33 @@ import Header from "../Header/Header";
 import { CurrentUserContext } from "../../../contexts/CurrentUserContext";
 import Navigation from "../Navigation/Navigation";
 
+type TProfile = {
+  name: string;
+  email: string;
+};
+
+type IProfileValues = {
+  profilename?: string;
+  profileemail?: string;
+};
+interface IProfileProps {
+  loggedIn: boolean;
+  onToggleBurger: ()=>void;
+  isToggleBurger: boolean;
+  onEditButton: ()=>void;
+  isEditProfile: boolean;
+  onEditProfile: ({ name, email }: TProfile) => void;
+  isLoading: boolean;
+  onCloseNav: ()=> void;
+  values: IProfileValues;
+  onInputChange: (event: React.FormEvent)=> void;
+  isValid: boolean;
+  submitError: string;
+  submitSuccess: string;
+  onSignout: ()=> void;
+  onSameValue: (e: React.FormEvent) => void;
+}
+
 function Profile({
   loggedIn,
   onToggleBurger,
@@ -19,10 +46,10 @@ function Profile({
   onCloseNav,
   onSameValue,
   isLoading,
-}) {
+}:IProfileProps) {
   const currentUser = useContext(CurrentUserContext);
 
-  function handleSubmit(e) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     let name = `${values["profilename"] || currentUser.name}`;
     let email = `${values["profileemail"] || currentUser.email}`;
@@ -32,7 +59,7 @@ function Profile({
     });
   }
 
-  function handleInputChange(e) {
+  function handleInputChange(e: React.ChangeEvent) {
     onInputChange(e);
     onSameValue(e);
   }
@@ -73,8 +100,8 @@ function Profile({
             className="profileform__input"
             name="profilename"
             required
-            minLength="2"
-            maxLength="30"
+            minLength={2}
+            maxLength={30}
             value={values["profilename"] || currentUser.name || ""}
             onChange={handleInputChange}
             readOnly={!isEditProfile}
@@ -93,8 +120,8 @@ function Profile({
             className="profileform__input"
             name="profileemail"
             required
-            minLength="2"
-            maxLength="30"
+            minLength={2}
+            maxLength={30}
             value={values["profileemail"] || currentUser.email || ""}
             onChange={handleInputChange}
             readOnly={!isEditProfile}
