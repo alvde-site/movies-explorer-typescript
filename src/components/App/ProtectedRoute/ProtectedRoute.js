@@ -1,14 +1,24 @@
-import React from "react";
+// import { FunctionComponent, ReactNode } from "react";
 import { Route, Redirect } from "react-router-dom";
 
 // этот компонент принимает другой компонент в качестве пропса
 // он также может взять неограниченное число пропсов и передать их новому компоненту
-const ProtectedRoute = ({ component: Component, ...props }) => {
-  return (
-    <Route>
-      {() => (props.loggedIn ? <Component {...props} /> : <Redirect to="/" />)}
-    </Route>
-  );
-};
+
+// interface IProtectedRouteProps {
+//   component: ReactNode;
+//   loggedIn: boolean;
+// }
+
+const ProtectedRoute =
+  // : FunctionComponent<IProtectedRouteProps>
+  ({ component: Component, ...props }) => {
+    return (
+      <Route>
+        {() =>
+          props.loggedIn ? <Component {...props} /> : <Redirect to="/" />
+        }
+      </Route>
+    );
+  };
 
 export default ProtectedRoute;

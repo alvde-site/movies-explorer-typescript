@@ -1,5 +1,33 @@
 import { Link } from "react-router-dom";
 
+type TRegister = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+type TRegisterValues = {
+  registername?: string;
+  registeremail?: string;
+  registerpassword?: string;
+};
+
+type TRegisterErrors = {
+  registername?: string;
+  registeremail?: string;
+  registerpassword?: string;
+};
+
+interface IRegisterProps {
+  onInputChange: (event: React.FormEvent)=> void;
+  values: TRegisterValues;
+  errors: TRegisterErrors;
+  isValid: boolean;
+  onRegister: ({ name, email, password }: TRegister) => void;
+  submitError: string;
+  isLoading: boolean;
+}
+
 function Register({
   onInputChange,
   values,
@@ -8,17 +36,17 @@ function Register({
   onRegister,
   submitError,
   isLoading,
-}) {
-  function handleSubmit(e) {
+}: IRegisterProps) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     onRegister({
-      name: values["registername"],
-      email: values["registeremail"],
-      password: values["registerpassword"],
+      name: values["registername"] || "",
+      email: values["registeremail"] || "",
+      password: values["registerpassword"] || "",
     });
   }
 
-  function handleInputChange(e) {
+  function handleInputChange(e: React.ChangeEvent) {
     onInputChange(e);
   }
 
@@ -45,8 +73,8 @@ function Register({
             } auth-form__input_register_name`}
             name="registername"
             required
-            minLength="2"
-            maxLength="30"
+            minLength={2}
+            maxLength={30}
             value={values["registername"] || ""}
             onChange={handleInputChange}
             formNoValidate
@@ -68,8 +96,8 @@ function Register({
             } auth-form__input_register_email`}
             name="registeremail"
             required
-            minLength="2"
-            maxLength="30"
+            minLength={2}
+            maxLength={30}
             value={values["registeremail"] || ""}
             onChange={handleInputChange}
             pattern="[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}"
@@ -92,8 +120,8 @@ function Register({
             } auth-form__input_register_password`}
             name="registerpassword"
             required
-            minLength="2"
-            maxLength="30"
+            minLength={2}
+            maxLength={30}
             value={values["registerpassword"] || ""}
             onChange={handleInputChange}
             formNoValidate

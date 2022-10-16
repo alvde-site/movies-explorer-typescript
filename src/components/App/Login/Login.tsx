@@ -44,7 +44,7 @@ function Login({
     });
   }
 
-  function handleInputChange(e: React.FormEvent) {
+  function handleInputChange(e: React.ChangeEvent) {
     onInputChange(e);
   }
 
