@@ -4,6 +4,8 @@ import Navigation from "../Navigation/Navigation";
 import Footer from "../Footer/Footer";
 import SearchForm from "../Movies/SearchForm/SearchForm";
 
+import { IMoviesProps } from "../../../utils/interfaces";
+
 function SavedMovies({
   loggedIn,
   onToggleBurger,
@@ -13,9 +15,11 @@ function SavedMovies({
   cardsData,
   onSelect,
   isSelected,
-  onSearchValue,
   onSearch,
+  isEmptyValue,
   searchValue,
+  onSearchValue,
+  isLoading,
   isNotFoundMovies,
   notFoundMoviesText,
   onAddMovies,
@@ -23,9 +27,7 @@ function SavedMovies({
   numberOfMovies,
   cards,
   onCloseNav,
-  isEmptyValue,
-  isLoading,
-}) {
+}:IMoviesProps) {
   return (
     <>
       <header>
@@ -44,19 +46,17 @@ function SavedMovies({
             onSearch={onSearch}
             searchValue={searchValue}
             isEmptyValue={isEmptyValue}
-            iisLoading={isLoading}
+            isLoading={isLoading}
           />
           <MoviesCardList
             cardsData={cardsData}
             onSelect={onSelect}
-            isSelected={isSelected}
             cardButtonClassType="card__select-button_type_remove"
             isNotFoundMovies={isNotFoundMovies}
             notFoundMoviesText={notFoundMoviesText}
             onAddMovies={onAddMovies}
             isDisableMoreButton={isDisableMoreButton}
             numberOfMovies={numberOfMovies}
-            cards={cards}
           />
         </section>
       </main>
