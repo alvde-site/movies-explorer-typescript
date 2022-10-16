@@ -1,6 +1,6 @@
-import { IMoviesCard } from "../../../utils/interfaces";
+import { IMoviesCardProps } from "../../../utils/interfaces";
 
-function MoviesCard({ card, index, onSelect, cardButtonClassType }:IMoviesCard) {
+function MoviesCard({ card, key, onSelect, cardButtonClassType }:IMoviesCardProps) {
   const cardDurationMovie = `${Math.floor(card.duration / 60)}ч${
     card.duration % 60 ? (card.duration % 60) + "м" : ""
   }`;
@@ -14,7 +14,7 @@ function MoviesCard({ card, index, onSelect, cardButtonClassType }:IMoviesCard) 
   }
 
   return (
-    <li key={index} className="card">
+    <li key={key} className="card">
       <a
         href={card.trailerLink}
         className="card__trailer-link"

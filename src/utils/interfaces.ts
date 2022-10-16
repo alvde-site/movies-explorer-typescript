@@ -50,9 +50,20 @@ export interface IMoviesProps {
   onCloseNav: ()=> void;
 }
 
-export interface IMoviesCard {
+export interface IMoviesCardListProps {
+  cardsData: ISavedMovie[];
+  onSelect: (card: ISavedMovie)=> void;
+  cardButtonClassType: string;
+  isNotFoundMovies: boolean;
+  notFoundMoviesText: string;
+  onAddMovies: (number: number)=> void;
+  isDisableMoreButton: boolean;
+  numberOfMovies: number;
+}
+
+export interface IMoviesCardProps {
   card: ISavedMovie;
-  index: number;
+  key: number;
   onSelect: (card: ISavedMovie)=> void;
   cardButtonClassType: string;
 }

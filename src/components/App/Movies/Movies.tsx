@@ -14,7 +14,6 @@ function Movies({
   isToggleFilter,
   cardsData,
   onSelect,
-  isSelected,
   onSearch,
   isEmptyValue,
   searchValue,
@@ -25,7 +24,6 @@ function Movies({
   onAddMovies,
   isDisableMoreButton,
   numberOfMovies,
-  cards,
   onCloseNav,
 }:IMoviesProps) {
   return (
@@ -54,14 +52,12 @@ function Movies({
             <MoviesCardList
               cardsData={cardsData}
               onSelect={onSelect}
-              isSelected={isSelected}
               cardButtonClassType="card__select-button_type_active"
               isNotFoundMovies={isNotFoundMovies}
               notFoundMoviesText={notFoundMoviesText}
               onAddMovies={onAddMovies}
               isDisableMoreButton={isDisableMoreButton}
               numberOfMovies={numberOfMovies}
-              cards={cards}
             />
           )}
         </section>

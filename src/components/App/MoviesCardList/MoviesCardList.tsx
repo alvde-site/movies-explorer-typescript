@@ -1,18 +1,18 @@
 import MoviesCard from "../MoviesCard/MoviesCard";
 import NotFoundMovies from "./NotFoundMovies/NotFoundMovies";
 
+import { IMoviesCardListProps } from "../../../utils/interfaces";
+
 function MoviesCardList({
   cardsData,
   onSelect,
-  isSelected,
   cardButtonClassType,
   isNotFoundMovies,
   notFoundMoviesText,
   onAddMovies,
   isDisableMoreButton,
   numberOfMovies,
-  cards,
-}) {
+}: IMoviesCardListProps) {
   function handleAddMovies() {
     onAddMovies(numberOfMovies);
   }
@@ -30,7 +30,6 @@ function MoviesCardList({
                   card={card}
                   key={card.movieId}
                   onSelect={onSelect}
-                  isSelected={isSelected}
                   cardButtonClassType={cardButtonClassType}
                 />
               );
