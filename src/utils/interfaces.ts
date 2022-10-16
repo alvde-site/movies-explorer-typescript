@@ -50,6 +50,13 @@ export interface IMoviesProps {
   onCloseNav: ()=> void;
 }
 
+export interface IMoviesCard {
+  card: ISavedMovie;
+  index: number;
+  onSelect: (card: ISavedMovie)=> void;
+  cardButtonClassType: string;
+}
+
 export interface ICurrentUser {
   name?: string;
   email?: string;

@@ -1,4 +1,6 @@
-function MoviesCard({ card, index, onSelect, cardButtonClassType }) {
+import { IMoviesCard } from "../../../utils/interfaces";
+
+function MoviesCard({ card, index, onSelect, cardButtonClassType }:IMoviesCard) {
   const cardDurationMovie = `${Math.floor(card.duration / 60)}ч${
     card.duration % 60 ? (card.duration % 60) + "м" : ""
   }`;
