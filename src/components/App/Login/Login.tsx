@@ -1,4 +1,31 @@
+import React from "react";
 import { Link } from "react-router-dom";
+
+type TLogin = {
+  email: string;
+  password: string;
+};
+
+type ILoginValues = {
+  loginemail?: string;
+  loginpassword?: string;
+};
+
+type TLoginErrors = {
+  loginemail?: string;
+  loginpassword?: string;
+};
+
+
+interface ILoginProps {
+  onInputChange: (event: React.FormEvent)=> void;
+  values: ILoginValues;
+  errors: TLoginErrors;
+  isValid: boolean;
+  onLogin: ({ email, password }: TLogin) => void;
+  submitError: string;
+  isLoading: boolean;
+}
 
 function Login({
   onInputChange,
@@ -8,16 +35,16 @@ function Login({
   onLogin,
   submitError,
   isLoading,
-}) {
-  function handleSubmit(e) {
+}: ILoginProps) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     onLogin({
-      email: values["loginemail"],
-      password: values["loginpassword"],
+      email: values["loginemail"] || "",
+      password: values["loginpassword"] || "",
     });
   }
 
-  function handleInputChange(e) {
+  function handleInputChange(e: React.FormEvent) {
     onInputChange(e);
   }
 
@@ -44,8 +71,8 @@ function Login({
             } auth-form__input_register_email`}
             name="loginemail"
             required
-            minLength="2"
-            maxLength="30"
+            minLength={2}
+            maxLength={30}
             value={values["loginemail"] || ""}
             onChange={handleInputChange}
             pattern="[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}"
@@ -53,7 +80,7 @@ function Login({
             disabled={isLoading}
           />
           <span id="error-loginemail" className="auth-form__input-error">
-            {errors["registeremail"] || ""}
+            {errors["loginemail"] || ""}
           </span>
         </fieldset>
         <fieldset className="auth-form__field">
@@ -68,8 +95,8 @@ function Login({
             } auth-form__input_register_password`}
             name="loginpassword"
             required
-            minLength="2"
-            maxLength="30"
+            minLength={2}
+            maxLength={30}
             value={values["loginpassword"] || ""}
             onChange={handleInputChange}
             formNoValidate

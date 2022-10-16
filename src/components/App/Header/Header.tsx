@@ -2,7 +2,13 @@ import { Link } from "react-router-dom";
 import AuthLinks from "./AuthLinks/AuthLinks";
 import NavLinks from "./NavLinks/NavLinks";
 
-function Header({ loggedIn, onToggleBurger, isToggleBurger }) {
+interface IHeaderProps{
+  loggedIn: boolean;
+  onToggleBurger: ()=> void;
+  isToggleBurger: boolean;
+}
+
+function Header({ loggedIn, onToggleBurger, isToggleBurger }:IHeaderProps) {
   return (
     <section className="header">
       <Link to="/" className="header__logo"></Link>
