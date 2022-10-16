@@ -1,6 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
+import { INavigationProps } from "../../../utils/interfaces";
 
-function Navigation({ isToggleBurger, onCloseNav }) {
+function Navigation({ isToggleBurger, onCloseNav }:INavigationProps) {
   function handleCloseNav() {
     onCloseNav();
   }

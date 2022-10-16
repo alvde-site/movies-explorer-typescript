@@ -68,6 +68,11 @@ export interface IMoviesCardProps {
   cardButtonClassType: string;
 }
 
+export interface INavigationProps {
+  isToggleBurger: boolean;
+  onCloseNav: ()=> void;
+}
+
 export interface ICurrentUser {
   name?: string;
   email?: string;

@@ -1,8 +1,11 @@
 import React from "react";
-
 import "./PageNotFound.css";
 
-function PageNotFound({ onBack }) {
+type TOnbackProps = {
+  onBack: ()=>void;
+}
+
+function PageNotFound({ onBack }:TOnbackProps) {
   function handleBack() {
     onBack();
   }
