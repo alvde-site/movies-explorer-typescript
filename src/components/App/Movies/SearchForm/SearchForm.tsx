@@ -25,7 +25,6 @@ function SearchForm({
   }
 
   function handleSearchChange(e: React.FormEvent<HTMLInputElement>) {
-    // onSearchValue((e.target as HTMLInputElement).value);
     onSearchValue((e.target as HTMLInputElement).value);
   }
 

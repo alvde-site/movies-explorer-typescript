@@ -4,6 +4,7 @@ import Header from "../Header/Header";
 import Navigation from "../Navigation/Navigation";
 import Footer from "../Footer/Footer";
 import Preloader from "../Preloader/Preloader";
+import { IMoviesProps } from "../../../utils/interfaces";
 
 function Movies({
   loggedIn,
@@ -26,7 +27,7 @@ function Movies({
   numberOfMovies,
   cards,
   onCloseNav,
-}) {
+}:IMoviesProps) {
   return (
     <>
       <header>

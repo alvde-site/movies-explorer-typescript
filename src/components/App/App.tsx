@@ -23,43 +23,7 @@ import {
   WIDTHOFBIGDEVICE,
   WIDTHOMEDIUMDEVICE,
 } from "../../utils/config";
-
-interface IMovies {
-  country: string;
-  description: string;
-  director: string;
-  duration: number;
-  nameEN: string;
-  nameRU: string;
-  trailerLink: string;
-}
-
-interface ISavedMovie extends IMovies {
-  image: string;
-  isClicked?: boolean;
-  movieId: number;
-  owner: ICurrentUser;
-  thumbnail: string;
-  year: string;
-  __v?: number;
-  _id?: string;
-}
-
-interface IInitialMovie extends IMovies{
-  created_at: string;
-  id: number;
-  image: {url: string};
-  updated_at: string;
-  year: string;
-}
-
-interface ICurrentUser {
-  name?: string;
-  email?: string;
-  password?: string;
-  __v?: number;
-  _id?: string;
-}
+import { ISavedMovie, IInitialMovie, ICurrentUser } from "../../utils/interfaces";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
