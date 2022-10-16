@@ -1,7 +1,13 @@
 import Header from "../../Header/Header";
 import webland from "../../../../images/web-land.png";
 
-function Promo({ loggedIn, isToggleBurger, onToggleBurger }) {
+interface IPromoProps {
+  loggedIn: boolean;
+  onToggleBurger: ()=> void;
+  isToggleBurger: boolean;
+}
+
+function Promo({ loggedIn, isToggleBurger, onToggleBurger }:IPromoProps) {
   return (
     <header className="promo" aria-label="Промо-блок">
       <Header
