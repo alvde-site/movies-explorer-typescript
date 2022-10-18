@@ -23,7 +23,11 @@ import {
   WIDTHOFBIGDEVICE,
   WIDTHOMEDIUMDEVICE,
 } from "../../utils/config";
-import { ISavedMovie, IInitialMovie, ICurrentUser } from "../../utils/interfaces";
+import {
+  ISavedMovie,
+  IInitialMovie,
+  ICurrentUser,
+} from "../../utils/interfaces";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -31,9 +35,7 @@ function App() {
   const [isToggleMoviesFilter, setIsToggleMoviesFilter] = useState(false);
   const [cards, setCards] = useState<ISavedMovie[]>([]);
   const [isSavedCards, setIsSavedCards] = useState<ISavedMovie[]>([]); // Сохраненные фильмы текущего пользователя
-  const [currentUser, setCurrentUser] = useState<ICurrentUser>(
-    {}
-  );
+  const [currentUser, setCurrentUser] = useState<ICurrentUser>({});
   const [isEmptySearchValue, setIsEmptySearchValue] = useState(false);
   const [isEmptySavedMoviesSearchValue, setIsEmptySavedMoviesSearchValue] =
     useState(false);
@@ -52,7 +54,9 @@ function App() {
   const [submitError, setSubmitError] = useState("");
   const [isEditProfile, setIsEditProfile] = useState(false);
   const [token, setToken] = useState("");
-  const [currentInitialMovies, setCurrentInitialMovies] = useState<ISavedMovie[]>([]);
+  const [currentInitialMovies, setCurrentInitialMovies] = useState<
+    ISavedMovie[]
+  >([]);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [isInvalidToken, setIsInvalidToken] = useState(false);
 
@@ -119,13 +123,15 @@ function App() {
             (movie: ISavedMovie) => userData._id === movie.owner
           );
 
-          const formattedMovies = moviesOfCurrentUser.map((movie: ISavedMovie) => {
-            return {
-              ...movie,
-              isClicked: true,
-              _id: movie._id,
-            };
-          });
+          const formattedMovies = moviesOfCurrentUser.map(
+            (movie: ISavedMovie) => {
+              return {
+                ...movie,
+                isClicked: true,
+                _id: movie._id,
+              };
+            }
+          );
 
           const initialMovies = JSON.parse(
             localStorage.getItem("initialmovies") || ""
@@ -314,8 +320,8 @@ function App() {
         m.nameRU &&
         m.nameEN
     );
-    const filterCrashTrailerLink = filterCrashMovies.filter((m: IInitialMovie) =>
-      m.trailerLink.startsWith("https")
+    const filterCrashTrailerLink = filterCrashMovies.filter(
+      (m: IInitialMovie) => m.trailerLink.startsWith("https")
     );
     return filterCrashTrailerLink;
   }
@@ -370,41 +376,45 @@ function App() {
           console.log(`${err}`);
         });
     } else {
-      MainApiSet.deleteMovie(card._id, token)
-        .then((deletedMovie) => {
-          card.isClicked = false;
+      if (!card._id) {
+        return;
+      } else {
+        MainApiSet.deleteMovie(card._id, token)
+          .then((deletedMovie) => {
+            card.isClicked = false;
 
-          // Удаляем выбранную карточку из localStorage сохраненных карточек и отображаем
-          const savedMovies = JSON.parse(localStorage.savedmovies);
-          const newSavedMovies = savedMovies.filter(
-            (m: ISavedMovie) => m.movieId !== deletedMovie.movieId
-          );
-          localStorage.setItem("savedmovies", JSON.stringify(newSavedMovies));
-          setIsSavedCards(newSavedMovies);
+            // Удаляем выбранную карточку из localStorage сохраненных карточек и отображаем
+            const savedMovies = JSON.parse(localStorage.savedmovies);
+            const newSavedMovies = savedMovies.filter(
+              (m: ISavedMovie) => m.movieId !== deletedMovie.movieId
+            );
+            localStorage.setItem("savedmovies", JSON.stringify(newSavedMovies));
+            setIsSavedCards(newSavedMovies);
 
-          // Удаляем выбранную карточку из localStorage карточек по умолчанию и отображаем
-          const newCard = { ...deletedMovie, isClicked: false };
-          setCurrentInitialMovies((movies: ISavedMovie[]) =>
-            movies.map((c: ISavedMovie) =>
+            // Удаляем выбранную карточку из localStorage карточек по умолчанию и отображаем
+            const newCard = { ...deletedMovie, isClicked: false };
+            setCurrentInitialMovies((movies: ISavedMovie[]) =>
+              movies.map((c: ISavedMovie) =>
+                c.movieId === newCard.movieId ? newCard : c
+              )
+            );
+
+            // Удалеяем выбранную карточку из localStorage найденных карточек на странице /movies и отображаем
+            const selectedMovies = JSON.parse(localStorage.movies);
+            const newSelectedCards = selectedMovies.map((c: ISavedMovie) =>
               c.movieId === newCard.movieId ? newCard : c
-            )
-          );
-
-          // Удалеяем выбранную карточку из localStorage найденных карточек на странице /movies и отображаем
-          const selectedMovies = JSON.parse(localStorage.movies);
-          const newSelectedCards = selectedMovies.map((c: ISavedMovie) =>
-            c.movieId === newCard.movieId ? newCard : c
-          );
-          localStorage.setItem("movies", JSON.stringify(newSelectedCards));
-        })
-        .catch((err) => {
-          console.log(`${err}`);
-        });
+            );
+            localStorage.setItem("movies", JSON.stringify(newSelectedCards));
+          })
+          .catch((err) => {
+            console.log(`${err}`);
+          });
+      }
+      setIsSavedCards((state) => state.filter((c) => c.isClicked));
+      setCards((state: ISavedMovie[]) =>
+        state.map((c: ISavedMovie) => (c.movieId === card.movieId ? card : c))
+      );
     }
-    setIsSavedCards((state) => state.filter((c) => c.isClicked));
-    setCards((state: ISavedMovie[]) =>
-      state.map((c: ISavedMovie) => (c.movieId === card.movieId ? card : c))
-    );
   }
 
   function handleSavedStates() {
@@ -505,8 +515,8 @@ function App() {
           setIsToggleMoviesFilter(false);
         });
     } else {
-      const foundMovies: ISavedMovie[] = currentInitialMovies.filter((m: ISavedMovie) =>
-        m.nameRU.toLowerCase().includes(value.toLowerCase())
+      const foundMovies: ISavedMovie[] = currentInitialMovies.filter(
+        (m: ISavedMovie) => m.nameRU.toLowerCase().includes(value.toLowerCase())
       );
       handleSaveToLocalStorage(foundMovies, value);
       let newCurrentInitialMovies;

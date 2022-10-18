@@ -1,10 +1,25 @@
+import { ISavedMovie, ICurrentUser } from "./interfaces";
+
+type TMainApi = {
+  baseUrl: string;
+  headers: TMainApiHeaders;
+  credentials: string;
+};
+type TMainApiHeaders = {
+  authorization: string;
+  Accept: string;
+  "Content-Type": string;
+};
+
 class MainApi {
-  constructor({ baseUrl, headers }) {
+  _baseUrl: string;
+  _headers: TMainApiHeaders;
+  constructor({ baseUrl, headers }: TMainApi) {
     this._baseUrl = baseUrl;
     this._headers = headers;
   }
 
-  getMovies(token) {
+  getMovies(token: string) {
     return fetch(`${this._baseUrl}/movies`, {
       headers: {
         "Content-Type": "application/json",
@@ -18,18 +33,18 @@ class MainApi {
   createMovie(
     {
       country,
+      description,
       director,
       duration,
-      year,
-      description,
-      image,
-      trailerLink,
-      thumbnail,
-      movieId,
       nameRU,
       nameEN,
-    },
-    token
+      trailerLink,
+      image,
+      movieId,
+      thumbnail,
+      year,
+    }: ISavedMovie,
+    token:string
   ) {
     return fetch(`${this._baseUrl}/movies`, {
       method: "POST",
@@ -55,7 +70,7 @@ class MainApi {
     }).then(this._checkResponse);
   }
 
-  deleteMovie(movieId, token) {
+  deleteMovie(movieId:string, token:string) {
     return fetch(`${this._baseUrl}/movies/${movieId}`, {
       method: "DELETE",
       headers: {
@@ -67,7 +82,7 @@ class MainApi {
     }).then(this._checkResponse);
   }
 
-  getCurrentUser(token) {
+  getCurrentUser(token:string) {
     return fetch(`${this._baseUrl}/users/me`, {
       headers: {
         "Content-Type": "application/json",
@@ -78,7 +93,7 @@ class MainApi {
     }).then(this._checkResponse);
   }
 
-  updateUser({ name, email }, token) {
+  updateUser({ name, email }:ICurrentUser, token:string) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
       headers: {
@@ -94,7 +109,7 @@ class MainApi {
     }).then(this._checkResponse);
   }
 
-  register({ name, password, email }) {
+  register({ name, password, email }:ICurrentUser) {
     return fetch(`${this._baseUrl}/signup`, {
       method: "POST",
       headers: this._headers,
@@ -107,7 +122,7 @@ class MainApi {
     }).then(this._checkResponse);
   }
 
-  login({ password, email }) {
+  login({ password, email }:ICurrentUser) {
     return fetch(`${this._baseUrl}/signin`, {
       method: "POST",
       headers: this._headers,
@@ -119,7 +134,7 @@ class MainApi {
     }).then(this._checkResponse);
   }
 
-  getContent = (token) => {
+  getContent = (token:string) => {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "GET",
       headers: {
@@ -131,7 +146,7 @@ class MainApi {
     }).then(this._checkResponse);
   };
 
-  signout(token) {
+  signout(token:string) {
     return fetch(`${this._baseUrl}/signout`, {
       headers: {
         "Content-Type": "application/json",
@@ -142,7 +157,7 @@ class MainApi {
     }).then(this._checkResponse);
   }
 
-  _checkResponse(res) {
+  _checkResponse(res:any) {
     return res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`);
   }
 }
