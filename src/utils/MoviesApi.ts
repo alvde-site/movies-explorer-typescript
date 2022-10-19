@@ -1,3 +1,5 @@
+import { IInitialMovie } from "./interfaces";
+
 type TMoviesHeaders = {
   "Content-Type": string;
 };
@@ -21,7 +23,7 @@ class MoviesApi {
     }).then(this._checkResponse);
   }
 
-  _checkResponse(res:any) {
+  _checkResponse(res:Response):IInitialMovie[] | PromiseLike<IInitialMovie[]>{
     return res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`);
   }
 }
