@@ -1,5 +1,16 @@
+type TMoviesHeaders = {
+  "Content-Type": string;
+};
+
+type TMoviesApi = {
+  baseUrl: string;
+  headers: TMoviesHeaders;
+};
+
 class MoviesApi {
-  constructor({ baseUrl, headers }) {
+  _baseUrl: string;
+  _headers: TMoviesHeaders;
+  constructor({ baseUrl, headers }:TMoviesApi) {
     this._baseUrl = baseUrl;
     this._headers = headers;
   }
@@ -10,7 +21,7 @@ class MoviesApi {
     }).then(this._checkResponse);
   }
 
-  _checkResponse(res) {
+  _checkResponse(res:any) {
     return res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`);
   }
 }
