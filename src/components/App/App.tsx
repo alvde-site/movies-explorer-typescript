@@ -345,7 +345,6 @@ function App() {
   }
 
   function handleSelectMovie(card: ISavedMovie) {
-    console.log(card);
     if (!card.isClicked) {
       MainApiSet.createMovie(card, token)
         .then((cardData) => {
@@ -447,7 +446,6 @@ function App() {
       // Проверяем - загружены ли фильмы по умолчанию
       MoviesApiSet.getInitialMovies()
         .then((movies: IInitialMovie[]) => {
-          console.log(movies);
           const isNotCrashMovies = filterCrashedMovies(movies);
           const formattedMovies = isNotCrashMovies.map(
             //  Сохраняем массив фильмом в нужном формате
