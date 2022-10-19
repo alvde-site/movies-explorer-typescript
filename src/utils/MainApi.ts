@@ -157,7 +157,7 @@ class MainApi {
     }).then(this._checkResponse);
   }
 
-  _checkResponse(res:any) {
+  _checkResponse(res:Response) {
     return res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`);
   }
 }
