@@ -1,3 +1,31 @@
+interface IProfile {
+  name: string;
+  email: string;
+};
+
+interface IProfileValues {
+  profilename?: string;
+  profileemail?: string;
+};
+
+export interface IProfileProps {
+  loggedIn: boolean;
+  onToggleBurger: ()=>void;
+  isToggleBurger: boolean;
+  onEditButton: ()=>void;
+  isEditProfile: boolean;
+  onEditProfile: ({ name, email }: IProfile) => void;
+  isLoading: boolean;
+  onCloseNav: ()=> void;
+  values: IProfileValues;
+  onInputChange: (event: React.FormEvent)=> void;
+  isValid: boolean;
+  submitError: string;
+  submitSuccess: string;
+  onSignout: ()=> void;
+  onSameValue: (e: React.FormEvent) => void;
+}
+
 export interface IMovies {
   country: string;
   description: string;

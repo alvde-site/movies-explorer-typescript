@@ -2,33 +2,9 @@ import { useContext } from "react";
 import Header from "../Header/Header";
 import { CurrentUserContext } from "../../../contexts/CurrentUserContext";
 import Navigation from "../Navigation/Navigation";
+import { IProfileProps } from "../../../utils/interfaces";
 
-type TProfile = {
-  name: string;
-  email: string;
-};
 
-type IProfileValues = {
-  profilename?: string;
-  profileemail?: string;
-};
-interface IProfileProps {
-  loggedIn: boolean;
-  onToggleBurger: ()=>void;
-  isToggleBurger: boolean;
-  onEditButton: ()=>void;
-  isEditProfile: boolean;
-  onEditProfile: ({ name, email }: TProfile) => void;
-  isLoading: boolean;
-  onCloseNav: ()=> void;
-  values: IProfileValues;
-  onInputChange: (event: React.FormEvent)=> void;
-  isValid: boolean;
-  submitError: string;
-  submitSuccess: string;
-  onSignout: ()=> void;
-  onSameValue: (e: React.FormEvent) => void;
-}
 
 function Profile({
   loggedIn,
