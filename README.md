@@ -2,11 +2,11 @@
 Доработка дипломной работы Демиденко Александра на Яндекс Практикуме:
 * Добавлен typeScript;
 
-## ССылки
+## Ссылки
 * [Ссылка на выложенную на сервер работающую фронтенд часть приложения](https://alvde-mesto.nomoredomains.sbs/)
-* [Ссылка на api: https://api.alvde-mesto.nomorepartiesxyz.ru](https://api.alvde-mesto.nomorepartiesxyz.ru)
+Если ссылка на выложенную на сервер работающую фронтенд часть приложения приложения не работает, приложение можно протестировать локально. Ниже инструкция по развертыванию.
 
-Технологии используемые в проекте:
+### Технологии используемые в проекте:
 * Flexbox, Grid
 * Верстка по БЭМ(Nested)
 * Адаптивная верстка
@@ -20,8 +20,8 @@
 * React, useState, useEffect, useHistory
 * TypeScript
 
-Инструкция по развертыванию:
-* Клонировать проект: git clone git@github.com:alvde-site/movies-explorer-frontend.git
+### Инструкция по развертыванию:
+* Клонировать проект: git clone https://github.com/alvde-site/movies-explorer-typescript
 * Перейти в корневую директорию и установить зависимости: npm install
 * Запустить frontend часть приложения на 3000 порту: npm run start
 * Для работы приложения нужно так же клонировать backend: git clone git@github.com:alvde-site/movies-explorer-api.git
